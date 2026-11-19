@@ -1,41 +1,94 @@
-
 import streamlit as st
 
 st.set_page_config(
     page_title="MilitaryLife",
     page_icon="🏠",
     layout="wide",
-    initial_sidebar_state="auto",
+    initial_sidebar_state="expanded",
 )
 
-PAGES = [
-    "🏡 Overview",
-    "✨ AI Assistant",
-    "📋 Applications",
-    "✅ Tasks & Deadlines",
-    "👥 Household Profile",
-    "🔐 Approvals",
-]
+# -----------------------------
+# Page configuration
+# -----------------------------
 
-# Keep the selected page when the app reruns.
+PAGES = {
+    "Overview": "🏡 Overview",
+    "AI Assistant": "✨ AI Assistant",
+    "All Applications": "📋 All Applications",
+    "In Progress": "⏳ In Progress",
+    "Completed": "✅ Completed",
+    "All Tasks": "📌 All Tasks",
+    "Upcoming Deadlines": "📅 Upcoming Deadlines",
+    "Household Members": "👥 Household Members",
+    "Household Information": "🏠 Household Information",
+    "Pending Approvals": "🔐 Pending Approvals",
+    "Approval History": "📜 Approval History",
+}
+
 if "page" not in st.session_state:
-    st.session_state.page = PAGES[0]
+    st.session_state.page = "Overview"
 
-# Always-visible navigation, including on mobile
-st.selectbox(
-    "Navigate MilitaryLife",
-    PAGES,
-    key="mobile_page",
-    index=PAGES.index(st.session_state.page),
-    on_change=lambda: st.session_state.update(
-        page=st.session_state.mobile_page
-    ),
-)
+
+def navigate(page):
+    st.session_state.page = page
+
+
+def nav_button(page):
+    selected = st.session_state.page == page
+
+    st.button(
+        PAGES[page],
+        key=f"nav_{page}",
+        use_container_width=True,
+        type="primary" if selected else "secondary",
+        on_click=navigate,
+        args=(page,),
+    )
+
+
+# -----------------------------
+# Sidebar
+# -----------------------------
+
+with st.sidebar:
+    st.title("🏠 MilitaryLife")
+    st.caption("Military Household Management")
+
+    st.divider()
+
+    nav_button("Overview")
+    nav_button("AI Assistant")
+
+    st.divider()
+
+    with st.expander("📋 Applications", expanded=True):
+        nav_button("All Applications")
+        nav_button("In Progress")
+        nav_button("Completed")
+
+    with st.expander("✅ Tasks & Deadlines"):
+        nav_button("All Tasks")
+        nav_button("Upcoming Deadlines")
+
+    with st.expander("👥 Household Profile"):
+        nav_button("Household Members")
+        nav_button("Household Information")
+
+    with st.expander("🔐 Approvals"):
+        nav_button("Pending Approvals")
+        nav_button("Approval History")
+
+    st.divider()
+    st.caption("MilitaryLife — Development Preview")
+
+
+# -----------------------------
+# Main dashboard
+# -----------------------------
+
 page = st.session_state.page
 
-st.divider()
-
-if page == "🏡 Overview":
+if page == "Overview":
     st.title("🏠 MilitaryLife Dashboard")
     st.write("Your AI-powered military household command center.")
 
@@ -46,27 +99,30 @@ if page == "🏡 Overview":
     col3.metric("Upcoming Deadlines", "—")
 
     st.subheader("Welcome to MilitaryLife")
+
     st.info(
         "We're building a shared platform for military "
-        "benefits, applications, household tasks, and AI assistance."
+        "benefits, applications, household tasks, "
+        "and AI assistance."
     )
 
-elif page == "✨ AI Assistant":
-    st.title("✨ AI Assistant")
+elif page == "AI Assistant":
+    st.title("✨ MilitaryLife AI Assistant")
+    st.caption("Your AI-powered military household coordinator")
     st.info("LangGraph AI integration is in development.")
 
-elif page == "📋 Applications":
-    st.title("📋 Applications")
+elif page in ["All Applications", "In Progress", "Completed"]:
+    st.title(PAGES[page])
     st.info("Application tracking is coming soon.")
 
-elif page == "✅ Tasks & Deadlines":
-    st.title("✅ Tasks & Deadlines")
+elif page in ["All Tasks", "Upcoming Deadlines"]:
+    st.title(PAGES[page])
     st.info("Shared task management is coming soon.")
 
-elif page == "👥 Household Profile":
-    st.title("👥 Household Profile")
+elif page in ["Household Members", "Household Information"]:
+    st.title(PAGES[page])
     st.info("Secure household profiles are coming soon.")
 
-elif page == "🔐 Approvals":
-    st.title("🔐 Approvals")
-    st.info("Review and approval workflows are coming soon.")
+elif page in ["Pending Approvals", "Approval History"]:
+    st.title(PAGES[page])
+    st.info("Application approval workflows are coming soon.")

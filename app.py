@@ -28,11 +28,14 @@ with st.sidebar:
     st.divider()
 
     st.radio(
-        "Navigation",
-        PAGES,
-        key="page",
-        label_visibility="collapsed",
-    )
+    "Navigation",
+    PAGES,
+    key="sidebar_page",
+    label_visibility="collapsed",
+    on_change=lambda: st.session_state.update(
+        page=st.session_state.sidebar_page
+    ),
+)
 
     st.divider()
     st.caption("MilitaryLife — Development Preview")
@@ -41,9 +44,12 @@ with st.sidebar:
 st.selectbox(
     "Navigate MilitaryLife",
     PAGES,
-    key="page",
+    key="mobile_page",
+    index=PAGES.index(st.session_state.page),
+    on_change=lambda: st.session_state.update(
+        page=st.session_state.mobile_page
+    ),
 )
-
 page = st.session_state.page
 
 st.divider()

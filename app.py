@@ -21,25 +21,6 @@ PAGES = [
 if "page" not in st.session_state:
     st.session_state.page = PAGES[0]
 
-# Desktop sidebar
-with st.sidebar:
-    st.title("🏠 MilitaryLife")
-    st.caption("Military Household Management")
-    st.divider()
-
-    st.radio(
-    "Navigation",
-    PAGES,
-    key="sidebar_page",
-    label_visibility="collapsed",
-    on_change=lambda: st.session_state.update(
-        page=st.session_state.sidebar_page
-    ),
-)
-
-    st.divider()
-    st.caption("MilitaryLife — Development Preview")
-
 # Always-visible navigation, including on mobile
 st.selectbox(
     "Navigate MilitaryLife",
